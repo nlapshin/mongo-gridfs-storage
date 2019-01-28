@@ -52,7 +52,9 @@ or **mongo** client
   **Optional**
   
     **options** - options for GridFSBucket instance.
+    
     **options.bucketName** - The 'files' and 'chunks' collections will be prefixed with the bucket name followed by a dot. Default to 'fs'.
+
     **options.chunkSizeBytes** - Number of bytes stored in each chunk. Defaults to 255KB(255* 1024).
 
 ## Methods
@@ -82,8 +84,11 @@ or **mongo** client
     **Requred**
     
     **filter** - search options.
+
     **filter._id** - id for file.
+
     **filter.id** - alias for id parameter.
+
     **filter.filename** - filename.
     
     id or filename are required.
@@ -91,11 +96,17 @@ or **mongo** client
     **Optional**
     
     **options** - options for [GridFSBucket find method](http://mongodb.github.io/node-mongodb-native/3.0/api/GridFSBucket.html#find).
+
     **options.batchSize** - Batch size. Default to null. Optional.
+
     **options.limit** - limit. Default to null. Optional.
+
     **options.maxTimeMS** - maxTimeMS. Default to null. Optional.
+
     **options.noCursorTimeout** - set cursor's noCursorTimeout flag. Default to null. Optional.
+
     **options.skip** - skip. Default to null. Optional.
+
     **options.sort** - sort. Default to null. Optional.
 
 ### find
@@ -123,8 +134,11 @@ or **mongo** client
     **Requred**
     
     **filter** - search options.
+
     **filter._id** - id for file.
+
     **filter.id** - alias for id parameter.
+
     **filter.filename** - filename.
     
     id or filename are required.
@@ -132,11 +146,17 @@ or **mongo** client
     **Optional**
     
     **options** - options for [GridFSBucket find method](http://mongodb.github.io/node-mongodb-native/3.0/api/GridFSBucket.html#find).
+
     **options.batchSize** - Batch size. Default to null. Optional.
+
     **options.limit** - limit. Default to null. Optional.
+
     **options.maxTimeMS** - maxTimeMS. Default to null. Optional.
+
     **options.noCursorTimeout** - set cursor's noCursorTimeout flag. Default to null. Optional.
+
     **options.skip** - skip. Default to null. Optional.
+
     **options.sort** - sort. Default to null. Optional.
 
 ### read
@@ -162,8 +182,11 @@ or **mongo** client
     **Requred**
     
     **filter** - search options.
+
     **filter._id** - id for file.
+
     **filter.id** - alias for id parameter.
+
     **filter.filename** - filename.
     
     id or filename are required.
@@ -195,8 +218,11 @@ or **mongo** client
     **stream** - readable stream.
     
     **filter** - search options.
+
     **filter._id** - id for file.
+
     **filter.id** - alias for id parameter.
+
     **filter.filename** - filename.
     
     id or filename are required.
@@ -224,7 +250,9 @@ or **mongo** client
     **Requred**
 
     **filter** - search options.
+
     **filter._id** - id for file.
+
     **filter.id** - alias for id parameter.
 
 ### findOneAndRead
@@ -252,8 +280,11 @@ or **mongo** client
     **stream** - readable stream.
     
     **filter** - search options.
+    
     **filter._id** - id for file.
+
     **filter.id** - alias for id parameter.
+
     **filter.filename** - filename.
     
     id or filename are required.
