@@ -29,6 +29,27 @@ or **mongo** client
   ...
 ```
 
+Methods short-list
+```js
+  const mongoGridFsStorage = new MongoGridFSStore(...);
+
+  // Find
+  const file = await mongoGridFsStorage.findOne({ filename: 'filename' }); // find one file into store.
+  const files = await mongoGridFsStorage.find({ filename: 'filename' }); // find files into store.
+  
+  // Read
+  const file = await mongoGridFsStorage.read({ filename: 'filename' }); // read file buffer into store.
+
+  // Write
+  const result = await mongoGridFsStorage.write(stream, { filename: 'filename' }); // write stream into store.
+
+  // Delete
+  const result = await mongoGridFsStorage.delete({ filename: 'filename' }); // delete file from store.
+
+  // FindOneAndRead
+  const result = await mongoGridFsStorage.findOneAndRead({ filename: 'filename' }); // find file and read buffer.
+```
+
 # MongoGridFSStore
 
 ## Constructor
@@ -52,7 +73,7 @@ or **mongo** client
   **Optional**
   
     **options** - options for GridFSBucket instance.
-    
+
     **options.bucketName** - The 'files' and 'chunks' collections will be prefixed with the bucket name followed by a dot. Default to 'fs'.
 
     **options.chunkSizeBytes** - Number of bytes stored in each chunk. Defaults to 255KB(255* 1024).
