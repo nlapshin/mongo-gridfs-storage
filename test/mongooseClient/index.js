@@ -19,9 +19,9 @@ module.exports = class MongooseClient {
 		const { url } = this.config;
 		const mongooseOptions = {
 			useNewUrlParser: true
-    };
+		};
     
-    return mongoose.connect(url, mongooseOptions);
+		return mongoose.connect(url, mongooseOptions);
 	}
 
 	drop() {
@@ -31,4 +31,4 @@ module.exports = class MongooseClient {
 	stop() {
 		return mongoose.connection.close();
 	}
-}
+};

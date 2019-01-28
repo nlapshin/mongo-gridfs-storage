@@ -1,75 +1,119 @@
 const pump = require('pump-promise');
+const streamToPromise = require('stream-to-promise');
 
 const { Readable } = require('stream');
 const { isUndefined } = require('lodash');
 
 module.exports = class MongoGridFSStore {
-  constructor(config = {}) {
-    this.connection = null;
-    this.storage = null;
+	constructor(config = {}) {
+		this.connection = null;
+		this.storage = null;
 
-    this.bucketName = config.bucketName || 'fs';
-    this.chunkSizeBytes = config.chunkSizeBytes || 255 * 1024;
+		this.bucketName = config.bucketName || 'fs';
+		this.chunkSizeBytes = config.chunkSizeBytes || 255 * 1024;
 
-    if (config.mongoose) {
-      const mongoose = config.mongoose;
-      const GridFSBucket = config.mongoose.mongo.GridFSBucket;
+		if (config.mongooseConnection) {
+			const mongoose = config.mongooseConnection;
+			const GridFSBucket = mongoose.mongo.GridFSBucket;
       
-      this.connection = mongoose.connection;
+			this.connection = mongoose.connection;
 
-      if (this.connection.readyState !== 1) {
-        throw new Error('Mongoose is not connected');
-      }
+			if (this.connection.readyState !== 1) {
+				throw new Error('Mongoose is not connected');
+			}
 
-      this.storage = new GridFSBucket(this.connection.db, {
-        bucketName: this.bucketName,
-        chunkSizeBytes: this.chunkSizeBytes
-		  });
-    } else {
-      throw new Error('Mongo connection is not supported');
-    }
-  }
+			this.storage = new GridFSBucket(this.connection.db, {
+				bucketName: this.bucketName,
+				chunkSizeBytes: this.chunkSizeBytes
+			});
+		} else {
+			throw new Error('Mongo connection is not supported');
+		}
+	}
 
-  find(filter = {}, options = {}) {
-    return new Promise((res, rej) => {
-      const cursor = this.storage.find(filter, options);
+	find(filter = {}, options = {}) {
+		const cursor = this.storage.find(filter, options);
 
-      if (!cursor) { 
-        return rej(new Error('Collection not found')); 
-      };
+		if (!cursor) { 
+			throw new Error('Collection not found'); 
+		}
 
-      cursor.next(res);
-    });
-  }
+		return cursor.toArray();
+	}
 
-  read(filter = {}) {
+	findOne(filter = {}, options = {}) {
+		options.limit = 1;
 
-  }
+		const cursor = this.storage.find(filter, options);
 
-  async write(sourceStream, options = {}) {
-    try {
-      if ((sourceStream instanceof Readable) !== true) {
-        throw new Error('stream is not readable stream');
-      }
+		if (!cursor) { 
+			throw new Error('Collection not found'); 
+		}
+
+		return cursor.next();
+	}
+
+	async read(filter = {}) {
+		try {
+			if (isUndefined(filter._id) && isUndefined(filter.id) && isUndefined(filter.filename)) {
+				throw new Error('id or filename is not set');
+			}
   
-      if (isUndefined(options.filename)) {
-        throw new Error('filename is not set');
-      }
+			const { _id, id, filename } = filter;
+			const __id = _id ? _id : id;
+
+			const gridFSStream = __id ? 
+				this.storage.openDownloadStream(__id) :
+				this.storage.openDownloadStreamByName(filename);
   
-      const { id, filename } = options;
-      const gridFSStream = id ? 
-        this.storage.openUploadStreamWithId(id, filename, options) :
-        this.storage.openUploadStream(filename, options);
+			const result = await streamToPromise(gridFSStream);
+
+			return Promise.resolve(result);
+		} catch(error) {
+			throw error;
+		}
+	}
+
+	async write(sourceStream, options = {}) {
+		try {
+			if ((sourceStream instanceof Readable) !== true) {
+				throw new Error('stream is not readable stream');
+			}
   
-      await pump(sourceStream, gridFSStream);
+			if (isUndefined(options.filename)) {
+				throw new Error('filename is not set');
+			}
+  
+			const { _id, id, filename } = options;
+			const __id = _id ? _id : id;
 
-      return Promise.resolve(true);
-    } catch(error) {
-      throw error;
-    }
-  }
+			const gridFSStream = __id ? 
+				this.storage.openUploadStreamWithId(__id, filename, options) :
+				this.storage.openUploadStream(filename, options);
+  
+			await pump(sourceStream, gridFSStream);
 
-  delete(filter = {}) {
+			return Promise.resolve(true);
+		} catch(error) {
+			throw error;
+		}
+	}
 
-  }
-}
+	async delete(filter = {}) {
+		try {
+			if (isUndefined(filter._id) && isUndefined(filter.id)) {
+				throw new Error('id is not set');
+			}
+  
+			const { _id, id } = filter;
+			const __id = _id ? _id : id;
+
+			const gridFSStream = this.storage.delete(__id);
+			await streamToPromise(gridFSStream);
+
+			return Promise.resolve(true);
+		} catch(error) {
+			throw error;
+		}
+	}
+};

@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "npx mocha ./test"
+    "test": "npx mocha ./test",
+    "lint": "npx eslint src test",
+    "lint-fix": "npx eslint src test --fix"
   },
   "repository": {
     "type": "git",
@@ -20,11 +22,13 @@
     "lodash": "^4.17.11",
     "mongodb": "^3.1.13",
     "mongoose": "^5.4.6",
-    "pump-promise": "^1.0.0"
+    "pump-promise": "^1.0.0",
+    "stream-to-promise": "^2.2.0"
   },
   "devDependencies": {
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
+    "eslint": "^5.12.1",
     "mocha": "^5.2.0"
   }
 }
