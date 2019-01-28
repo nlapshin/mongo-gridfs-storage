@@ -10,7 +10,7 @@ npm i mongo-gridfs-storage
 
 # Usage
 
-You can use mongoose connection
+You can use **mongoose** connection
 ```js
   const MongoGridFSStore = require('mongo-gridfs-storage');
 
@@ -19,7 +19,7 @@ You can use mongoose connection
 
   ...
 ```
-or mongo client
+or **mongo** client
 ```js
   const MongoGridFSStore = require('mongo-gridfs-storage');
 
@@ -33,198 +33,230 @@ or mongo client
 
 ## Constructor
 
-```js
-  const mongoGridFsStorage = MongoGridFSStore(connection, options);
-```
+* **Description**
 
-**connection** - MongoDB connection.
+    Created instance of mongo-gridfs-store.
 
-**options** - options for GridFSBucket instance.
+* **Sample call**
 
-**options.bucketName** - The 'files' and 'chunks' collections will be prefixed with the bucket name followed by a dot. Default to 'fs'.
+    ```js
+      const mongoGridFsStorage = MongoGridFSStore(connection, options);
+    ```
 
-**options.chunkSizeBytes** - Number of bytes stored in each chunk. Defaults to 255KB(255* 1024).
+* **Params**
+
+    **Requred**
+    
+    **connection** - MongoDB connection.
+
+  **Optional**
+  
+    **options** - options for GridFSBucket instance.
+    **options.bucketName** - The 'files' and 'chunks' collections will be prefixed with the bucket name followed by a dot. Default to 'fs'.
+    **options.chunkSizeBytes** - Number of bytes stored in each chunk. Defaults to 255KB(255* 1024).
 
 ## Methods
 
 ### findOne
 
-Method find one file by filename into storage or id and return [simple MongoDB meta-object](https://docs.mongodb.com/manual/core/gridfs/#the-files-collection) as Promise-Object.
+* **Description**
 
-```js
-  const mongoGridFsStorage = MongoGridFSStore(connection);
-  
-  const filter = {
-    filename: 'filename'
-  };
+     Method find file into MongoDB file storage by filename or id. Return array of [simple MongoDB file meta-object](https://docs.mongodb.com/manual/core/gridfs/#the-files-collection) as Promise-Object.
+   
+* **Sample call**
 
-  const options = {};
+    ```js
+      const mongoGridFsStorage = MongoGridFSStore(connection);
+      
+      const filter = {
+        filename: 'filename'
+      };
+    
+      const options = {};
+    
+      const file = await mongoGridFsStorage.findOne(filter, options);
+    ```
 
-  const file = await mongoGridFsStorage.findOne(filter, options);
-```
+* **Params**
 
-**filter** - search options.
-
-**filter._id** - id for file.
-
-**filter.id** - alias for id parameter.
-
-**filter.filename** - filename.
-
-id or filename are required.
-
-**options** - options for [GridFSBucket find method](http://mongodb.github.io/node-mongodb-native/3.0/api/GridFSBucket.html#find).
-
-**options.batchSize** - Batch size. Default to null. Optional.
-
-**options.limit** - limit. Default to null. Optional.
-
-**options.maxTimeMS** - maxTimeMS. Default to null. Optional.
-
-**options.noCursorTimeout** - set cursor's noCursorTimeout flag. Default to null. Optional.
-
-**options.skip** - skip. Default to null. Optional.
-
-**options.sort** - sort. Default to null. Optional.
+    **Requred**
+    
+    **filter** - search options.
+    **filter._id** - id for file.
+    **filter.id** - alias for id parameter.
+    **filter.filename** - filename.
+    
+    id or filename are required.
+    
+    **Optional**
+    
+    **options** - options for [GridFSBucket find method](http://mongodb.github.io/node-mongodb-native/3.0/api/GridFSBucket.html#find).
+    **options.batchSize** - Batch size. Default to null. Optional.
+    **options.limit** - limit. Default to null. Optional.
+    **options.maxTimeMS** - maxTimeMS. Default to null. Optional.
+    **options.noCursorTimeout** - set cursor's noCursorTimeout flag. Default to null. Optional.
+    **options.skip** - skip. Default to null. Optional.
+    **options.sort** - sort. Default to null. Optional.
 
 ### find
 
-Method find by filename or id into storage and return array of [simple MongoDB meta-object](https://docs.mongodb.com/manual/core/gridfs/#the-files-collection) as Promise-Object.
+* **Description**
 
-```js
-  const mongoGridFsStorage = MongoGridFSStore(connection);
-  
-  const filter = {
-    filename: 'filename'
-  };
+     Method find files into MongoDB file storage by filename or id. Return array of [simple MongoDB file meta-object](https://docs.mongodb.com/manual/core/gridfs/#the-files-collection) as Promise-Object.
+   
+* **Sample call**
 
-  const options = {};
+    ```js
+      const mongoGridFsStorage = MongoGridFSStore(connection);
+      
+      const filter = {
+        filename: 'filename'
+      };
+    
+      const options = {};
+    
+      const file = await mongoGridFsStorage.find(filter, options);
+    ```
 
-  const file = await mongoGridFsStorage.find(filter, options);
-```
+* **Params**
 
-**filter** - search options.
-
-**filter._id** - id for file.
-
-**filter.id** - alias for id parameter.
-
-**filter.filename** - filename.
-
-id or filename are required.
-
-**options** - options for [GridFSBucket find method](http://mongodb.github.io/node-mongodb-native/3.0/api/GridFSBucket.html#find).
-
-**options.batchSize** - Batch size. Default to null. Optional.
-
-**options.limit** - limit. Default to null. Optional.
-
-**options.maxTimeMS** - maxTimeMS. Default to null. Optional.
-
-**options.noCursorTimeout** - set cursor's noCursorTimeout flag. Default to null. Optional.
-
-**options.skip** - skip. Default to null. Optional.
-
-**options.sort** - sort. Default to null. Optional.
+    **Requred**
+    
+    **filter** - search options.
+    **filter._id** - id for file.
+    **filter.id** - alias for id parameter.
+    **filter.filename** - filename.
+    
+    id or filename are required.
+    
+    **Optional**
+    
+    **options** - options for [GridFSBucket find method](http://mongodb.github.io/node-mongodb-native/3.0/api/GridFSBucket.html#find).
+    **options.batchSize** - Batch size. Default to null. Optional.
+    **options.limit** - limit. Default to null. Optional.
+    **options.maxTimeMS** - maxTimeMS. Default to null. Optional.
+    **options.noCursorTimeout** - set cursor's noCursorTimeout flag. Default to null. Optional.
+    **options.skip** - skip. Default to null. Optional.
+    **options.sort** - sort. Default to null. Optional.
 
 ### read
 
-Method read file into storage by filename or id and return file buffer as Promise-Object. If file not found, then return null.
+* **Description**
 
-```js
-  const mongoGridFsStorage = MongoGridFSStore(connection);
+     Method read file into MongoDB file chunk storage by filename or id. Return Buffer [simple MongoDB file meta-object](https://docs.mongodb.com/manual/core/gridfs/#the-files-collection) as Promise-Object. If file not found, then return null.
+   
+* **Sample call**
+
+    ```js
+      const mongoGridFsStorage = MongoGridFSStore(connection);
   
-  const filter = {
-    filename: 'filename'
-  };
+      const filter = {
+        filename: 'filename'
+      };
 
-  const fileBuffer = await mongoGridFsStorage.read(filter);
-```
+      const fileBuffer = await mongoGridFsStorage.read(filter);
+    ```
 
-**filter** - search options.
+* **Params**
 
-**filter._id** - id for file.
-
-**filter.id** - alias for id parameter.
-
-**filter.filename** - filename.
-
-id or filename are required.
+    **Requred**
+    
+    **filter** - search options.
+    **filter._id** - id for file.
+    **filter.id** - alias for id parameter.
+    **filter.filename** - filename.
+    
+    id or filename are required.
 
 ### write
 
-Method write stream into storage with filename or id. Return Promise that must be resolved with a 'true' value in the end.
+* **Description**
 
-```js
-  const mongoGridFsStorage = MongoGridFSStore(connection);
+     Method write readable stream into MongoDB file chunk storage and save it with filename or id, then has been set. Return Promise that must be resolved with a 'true' value in the end.
+   
+* **Sample call**
 
-  const stream = getReadableStream();
-  
-  const options = {
-    filename: 'filename'
-  };
+    ```js
+      const mongoGridFsStorage = MongoGridFSStore(connection);
 
-  const result = await mongoGridFsStorage.write(stream, options);
-```
+      const stream = getReadableStream();
+      
+      const options = {
+        filename: 'filename'
+      };
 
-**fileStream** - readable stream.
+      const result = await mongoGridFsStorage.write(stream, options);
+    ```
 
-**filter** - search options.
+* **Params**
 
-**filter._id** - id for file.
+    **Requred**
 
-**filter.id** - alias for id parameter.
-
-**filter.filename** - filename.
-
-id or filename are required.
+    **stream** - readable stream.
+    
+    **filter** - search options.
+    **filter._id** - id for file.
+    **filter.id** - alias for id parameter.
+    **filter.filename** - filename.
+    
+    id or filename are required.
 
 ### delete
 
-Method delete file into storage by filename or id. Return Promise that must be resolved with a 'true' value in the end.
+* **Description**
 
-```js
-  const mongoGridFsStorage = MongoGridFSStore(connection);
-  
-  const filter = {
-    filename: 'filename'
-  };
+    Method remove file into MongoDB file storage by id. Return Promise that must be resolved with a 'true' value in the end.
+   
+* **Sample call**
 
-  const result = await mongoGridFsStorage.delete(filter);
-```
+    ```js
+      const mongoGridFsStorage = MongoGridFSStore(connection);
+      
+      const filter = {
+        id: <Object ID>
+      };
 
-**filter** - search options.
+      const result = await mongoGridFsStorage.delete(filter);
+    ```
 
-**filter._id** - id for file.
+* **Params**
 
-**filter.id** - alias for id parameter.
+    **Requred**
 
-id are required.
-
+    **filter** - search options.
+    **filter._id** - id for file.
+    **filter.id** - alias for id parameter.
 
 ### findOneAndRead
 
-Method is composition two methods: findOne and read. Method find by filename or id into storage, read it and return file Buffer. Return null if file not found.
+* **Description**
 
-```js
-  const mongoGridFsStorage = MongoGridFSStore(connection);
-  
-  const filter = {
-    filename: 'filename'
-  };
+    Method is composition two methods: findOne and read. Method find by filename or id into storage, read it and return file Buffer. Return null if file not found.
+   
+* **Sample call**
 
-  const result = await mongoGridFsStorage.delete(filter);
-```
+    ```js
+      const mongoGridFsStorage = MongoGridFSStore(connection);
+      
+      const filter = {
+        filename: 'filename'
+      };
 
-**filter** - search options.
+      const result = await mongoGridFsStorage.findOneAndRead(filter);
+    ```
 
-**filter._id** - id for file.
+* **Params**
 
-**filter.id** - alias for id parameter.
+    **Requred**
 
-**filter.filename** - filename.
-
-filename or id are required.
+    **stream** - readable stream.
+    
+    **filter** - search options.
+    **filter._id** - id for file.
+    **filter.id** - alias for id parameter.
+    **filter.filename** - filename.
+    
+    id or filename are required.
 
 # Test
 
@@ -234,4 +266,4 @@ npm run test
 
 # License
 
-MIT © nlapshin
+MIT © [nlapshin](https://www.npmjs.com/~nlapshin)
