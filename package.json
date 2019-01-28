@@ -17,6 +17,13 @@
   "bugs": {
     "url": "https://github.com/nlapshin/mongo-gridfs-storage/issues"
   },
+  "keywords": [
+    "mongo",
+    "mongodb",
+    "mongoose",
+    "gridfs",
+    "mongo-gridfs"
+  ],
   "homepage": "https://github.com/nlapshin/mongo-gridfs-storage#readme",
   "dependencies": {
     "lodash": "^4.17.11",
