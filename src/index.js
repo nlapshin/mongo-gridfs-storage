@@ -1,3 +1,5 @@
+const { GridFSBucket } = require('mongodb');
+
 const pump = require('pump-promise');
 const streamToPromise = require('stream-to-promise');
 
@@ -5,30 +7,17 @@ const { Readable } = require('stream');
 const { isUndefined } = require('lodash');
 
 module.exports = class MongoGridFSStore {
-	constructor(config = {}) {
-		this.connection = null;
+	constructor(connection = null, config = {}) {
+		this.connection = connection;
 		this.storage = null;
 
 		this.bucketName = config.bucketName || 'fs';
 		this.chunkSizeBytes = config.chunkSizeBytes || 255 * 1024;
 
-		if (config.mongooseConnection) {
-			const mongoose = config.mongooseConnection;
-			const GridFSBucket = mongoose.mongo.GridFSBucket;
-      
-			this.connection = mongoose.connection;
-
-			if (this.connection.readyState !== 1) {
-				throw new Error('Mongoose is not connected');
-			}
-
-			this.storage = new GridFSBucket(this.connection.db, {
-				bucketName: this.bucketName,
-				chunkSizeBytes: this.chunkSizeBytes
-			});
-		} else {
-			throw new Error('Mongo connection is not supported');
-		}
+		this.storage = new GridFSBucket(this.connection, {
+			bucketName: this.bucketName,
+			chunkSizeBytes: this.chunkSizeBytes
+		});
 	}
 
 	find(filter = {}, options = {}) {

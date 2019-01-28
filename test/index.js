@@ -28,9 +28,7 @@ describe('MongoGridFSStore', () => {
 	});
   
 	it('should execute', () => {
-		const store = new MongoGridFSStore({
-			mongooseConnection: mongo.mongoose
-		});
+		const store = new MongoGridFSStore(mongo.mongoose.connection.db);
     
 		expect(store).to.be.exist;
 	});
@@ -39,17 +37,13 @@ describe('MongoGridFSStore', () => {
 		this.slow(2000);
 
 		it('should throw error if stream is not instance of readable stream', () => {
-			const store = new MongoGridFSStore({
-				mongooseConnection: mongo.mongoose
-			});
+			const store = new MongoGridFSStore(mongo.mongoose.connection.db);
 
 			return expect(store.write()).to.eventually.be.rejectedWith(Error, /stream is not readable stream/);
 		});
 
 		it('should throw error if filename is not set', () => {
-			const store = new MongoGridFSStore({
-				mongooseConnection: mongo.mongoose
-			});
+			const store = new MongoGridFSStore(mongo.mongoose.connection.db);
 
 			const stream = getFixtureReadableStream();
 
@@ -57,9 +51,7 @@ describe('MongoGridFSStore', () => {
 		});
 
 		it('should write file stream into storage', async () => {
-			const store = new MongoGridFSStore({
-				mongooseConnection: mongo.mongoose
-			});
+			const store = new MongoGridFSStore(mongo.mongoose.connection.db);
 
 			const stream = getFixtureReadableStream();
 			const filename = 'tester';
@@ -82,17 +74,13 @@ describe('MongoGridFSStore', () => {
 		this.slow(2000);
 
 		it('should throw error if filename and id is not set', () => {
-			const store = new MongoGridFSStore({
-				mongooseConnection: mongo.mongoose
-			});
+			const store = new MongoGridFSStore(mongo.mongoose.connection.db);
 
 			return expect(store.read({})).to.eventually.be.rejectedWith(Error, /id or filename is not set/);
 		});
 
 		it('should read file from storage', async () => {
-			const store = new MongoGridFSStore({
-				mongooseConnection: mongo.mongoose
-			});
+			const store = new MongoGridFSStore(mongo.mongoose.connection.db);
 
 			const stream = getFixtureReadableStream();
 			const file = await streamToPromise(getFixtureReadableStream());
@@ -109,17 +97,13 @@ describe('MongoGridFSStore', () => {
 		this.slow(2000);
 
 		it('should throw error if id is not set', () => {
-			const store = new MongoGridFSStore({
-				mongooseConnection: mongo.mongoose
-			});
+			const store = new MongoGridFSStore(mongo.mongoose.connection.db);
 
 			return expect(store.delete({})).to.eventually.be.rejectedWith(Error, /id is not set/);
 		});
 
 		it('should delete file from storage', async () => {
-			const store = new MongoGridFSStore({
-				mongooseConnection: mongo.mongoose
-			});
+			const store = new MongoGridFSStore(mongo.mongoose.connection.db);
 
 			const stream = getFixtureReadableStream();
 			const filename = 'tester';
@@ -141,9 +125,7 @@ describe('MongoGridFSStore', () => {
 		this.slow(2000);
 
 		it('should return null if file not found', async () => {
-			const store = new MongoGridFSStore({
-				mongooseConnection: mongo.mongoose
-			});
+			const store = new MongoGridFSStore(mongo.mongoose.connection.db);
 
 			const filename = 'tester';
 
@@ -154,9 +136,7 @@ describe('MongoGridFSStore', () => {
 
 
 		it('should find one file with meta inforamtion', async () => {
-			const store = new MongoGridFSStore({
-				mongooseConnection: mongo.mongoose
-			});
+			const store = new MongoGridFSStore(mongo.mongoose.connection.db);
 
 			const stream = getFixtureReadableStream();
 			const filename = 'tester';
@@ -173,9 +153,7 @@ describe('MongoGridFSStore', () => {
 		this.slow(2000);
 
 		it('should return empty list if file not found', async () => {
-			const store = new MongoGridFSStore({
-				mongooseConnection: mongo.mongoose
-			});
+			const store = new MongoGridFSStore(mongo.mongoose.connection.db);
 
 			const filename = 'tester';
 
@@ -185,9 +163,7 @@ describe('MongoGridFSStore', () => {
 		});
 
 		it('should find meta list of files', async () => {
-			const store = new MongoGridFSStore({
-				mongooseConnection: mongo.mongoose
-			});
+			const store = new MongoGridFSStore(mongo.mongoose.connection.db);
 
 			const stream = getFixtureReadableStream();
 			const filename = 'tester';
@@ -208,9 +184,7 @@ describe('MongoGridFSStore', () => {
 		this.slow(2000);
 
 		it('should return null if file not found', async () => {
-			const store = new MongoGridFSStore({
-				mongooseConnection: mongo.mongoose
-			});
+			const store = new MongoGridFSStore(mongo.mongoose.connection.db);
 
 			const filename = 'tester';
 
@@ -220,9 +194,7 @@ describe('MongoGridFSStore', () => {
 		});
 
 		it('should find one file and then read it', async () => {
-			const store = new MongoGridFSStore({
-				mongooseConnection: mongo.mongoose
-			});
+			const store = new MongoGridFSStore(mongo.mongoose.connection.db);
 
 			const stream = getFixtureReadableStream();
 			const filename = 'tester';
