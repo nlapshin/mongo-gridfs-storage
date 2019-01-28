@@ -49,7 +49,7 @@ or mongo client
 
 ### findOne
 
-Method find one file by filename into storage or id and return [https://docs.mongodb.com/manual/core/gridfs/#the-files-collection](simple MongoDB meta-object) as Promise-Object.
+Method find one file by filename into storage or id and return [simple MongoDB meta-object](https://docs.mongodb.com/manual/core/gridfs/#the-files-collection) as Promise-Object.
 
 ```js
   const mongoGridFsStorage = MongoGridFSStore(connection);
@@ -73,7 +73,7 @@ Method find one file by filename into storage or id and return [https://docs.mon
 
 id or filename are required.
 
-**options** - options for [http://mongodb.github.io/node-mongodb-native/3.0/api/GridFSBucket.html#find](GridFSBucket find method).
+**options** - options for [GridFSBucket find method](http://mongodb.github.io/node-mongodb-native/3.0/api/GridFSBucket.html#find).
 
 **options.batchSize** - Batch size. Default to null. Optional.
 
@@ -89,7 +89,7 @@ id or filename are required.
 
 ### find
 
-Method find by filename or id into storage and return array of [https://docs.mongodb.com/manual/core/gridfs/#the-files-collection](simple MongoDB meta-object) as Promise-Object.
+Method find by filename or id into storage and return array of [simple MongoDB meta-object](https://docs.mongodb.com/manual/core/gridfs/#the-files-collection) as Promise-Object.
 
 ```js
   const mongoGridFsStorage = MongoGridFSStore(connection);
@@ -113,7 +113,7 @@ Method find by filename or id into storage and return array of [https://docs.mon
 
 id or filename are required.
 
-**options** - options for [http://mongodb.github.io/node-mongodb-native/3.0/api/GridFSBucket.html#find](GridFSBucket find method).
+**options** - options for [GridFSBucket find method](http://mongodb.github.io/node-mongodb-native/3.0/api/GridFSBucket.html#find).
 
 **options.batchSize** - Batch size. Default to null. Optional.
 
