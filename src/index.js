@@ -116,4 +116,14 @@ module.exports = class MongoGridFSStore {
 			throw error;
 		}
 	}
+  
+	async findOneAndRead(filter = {}) {
+		const file = await this.findOne(filter);
+
+		if (file) {
+			return this.read(file);
+		}
+
+		return null;
+	}
 };

@@ -165,7 +165,7 @@ describe('MongoGridFSStore', () => {
 
 			const resultFile = await store.findOne({ filename });
 
-			expect(resultFile.filename).to.equal('tester');
+			expect(resultFile.filename).to.equal(filename);
 		});
 	});
   
@@ -200,7 +200,39 @@ describe('MongoGridFSStore', () => {
 
 			const file = resultFiles[0];
 
-			expect(file.filename).to.equal('tester');
+			expect(file.filename).to.equal(filename);
+		});
+	});
+  
+	describe('findOneAndRead', function() {
+		this.slow(2000);
+
+		it('should return null if file not found', async () => {
+			const store = new MongoGridFSStore({
+				mongooseConnection: mongo.mongoose
+			});
+
+			const filename = 'tester';
+
+			const resultFile = await store.findOneAndRead({ filename });
+
+			expect(resultFile).to.be.null;
+		});
+
+		it('should find one file and then read it', async () => {
+			const store = new MongoGridFSStore({
+				mongooseConnection: mongo.mongoose
+			});
+
+			const stream = getFixtureReadableStream();
+			const filename = 'tester';
+			const file = await streamToPromise(getFixtureReadableStream());
+
+			await store.write(stream, { filename });
+
+			const result = await store.findOneAndRead({ filename });
+
+			expect(Buffer.compare(result, file)).to.equal(0);
 		});
 	});
 });
