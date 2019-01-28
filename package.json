@@ -1,7 +1,7 @@
 {
   "name": "mongo-gridfs-storage",
   "version": "1.0.0",
-  "description": "",
+  "description": "Wrapper over the native GridFSBucket from the MongoDB Driver, which provide API by Promise style",
   "main": "index.js",
   "scripts": {
     "test": "npx mocha ./test",

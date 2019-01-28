@@ -40,7 +40,9 @@ or mongo client
 **connection** - MongoDB connection.
 
 **options** - options for GridFSBucket instance.
+
 **options.bucketName** - The 'files' and 'chunks' collections will be prefixed with the bucket name followed by a dot. Default to 'fs'.
+
 **options.chunkSizeBytes** - Number of bytes stored in each chunk. Defaults to 255KB(255* 1024).
 
 ## Methods
@@ -62,18 +64,27 @@ Method find one file by filename into storage or id and return [https://docs.mon
 ```
 
 **filter** - search options.
+
 **filter._id** - id for file.
-**filter.id** - alias id parameter.
+
+**filter.id** - alias for id parameter.
+
 **filter.filename** - filename.
 
 id or filename are required.
 
 **options** - options for [http://mongodb.github.io/node-mongodb-native/3.0/api/GridFSBucket.html#find](GridFSBucket find method).
+
 **options.batchSize** - Batch size. Default to null. Optional.
+
 **options.limit** - limit. Default to null. Optional.
+
 **options.maxTimeMS** - maxTimeMS. Default to null. Optional.
+
 **options.noCursorTimeout** - set cursor's noCursorTimeout flag. Default to null. Optional.
+
 **options.skip** - skip. Default to null. Optional.
+
 **options.sort** - sort. Default to null. Optional.
 
 ### find
@@ -93,18 +104,27 @@ Method find by filename or id into storage and return array of [https://docs.mon
 ```
 
 **filter** - search options.
+
 **filter._id** - id for file.
-**filter.id** - alias id parameter.
+
+**filter.id** - alias for id parameter.
+
 **filter.filename** - filename.
 
 id or filename are required.
 
 **options** - options for [http://mongodb.github.io/node-mongodb-native/3.0/api/GridFSBucket.html#find](GridFSBucket find method).
+
 **options.batchSize** - Batch size. Default to null. Optional.
+
 **options.limit** - limit. Default to null. Optional.
+
 **options.maxTimeMS** - maxTimeMS. Default to null. Optional.
+
 **options.noCursorTimeout** - set cursor's noCursorTimeout flag. Default to null. Optional.
+
 **options.skip** - skip. Default to null. Optional.
+
 **options.sort** - sort. Default to null. Optional.
 
 ### read
@@ -122,8 +142,11 @@ Method read file into storage by filename or id and return file buffer as Promis
 ```
 
 **filter** - search options.
+
 **filter._id** - id for file.
-**filter.id** - alias id parameter.
+
+**filter.id** - alias for id parameter.
+
 **filter.filename** - filename.
 
 id or filename are required.
@@ -147,8 +170,11 @@ Method write stream into storage with filename or id. Return Promise that must b
 **fileStream** - readable stream.
 
 **filter** - search options.
+
 **filter._id** - id for file.
-**filter.id** - alias id parameter.
+
+**filter.id** - alias for id parameter.
+
 **filter.filename** - filename.
 
 id or filename are required.
@@ -168,8 +194,10 @@ Method delete file into storage by filename or id. Return Promise that must be r
 ```
 
 **filter** - search options.
+
 **filter._id** - id for file.
-**filter.id** - alias id parameter.
+
+**filter.id** - alias for id parameter.
 
 id are required.
 
@@ -189,11 +217,20 @@ Method is composition two methods: findOne and read. Method find by filename or 
 ```
 
 **filter** - search options.
+
 **filter._id** - id for file.
-**filter.id** - alias id parameter.
+
+**filter.id** - alias for id parameter.
+
 **filter.filename** - filename.
 
 filename or id are required.
+
+# Test
+
+```sh
+npm run test
+```
 
 # License
 
