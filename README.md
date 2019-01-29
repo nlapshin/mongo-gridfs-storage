@@ -66,7 +66,7 @@ Methods short-list
 
 * **Params**
 
-    **Requred**
+    **Requried**
     
     **connection** - MongoDB connection.
 
@@ -102,7 +102,7 @@ Methods short-list
 
 * **Params**
 
-    **Requred**
+    **Requried**
     
     **filter** - search options.
 
@@ -152,7 +152,7 @@ Methods short-list
 
 * **Params**
 
-    **Requred**
+    **Requried**
     
     **filter** - search options.
 
@@ -200,7 +200,7 @@ Methods short-list
 
 * **Params**
 
-    **Requred**
+    **Requried**
     
     **filter** - search options.
 
@@ -234,7 +234,7 @@ Methods short-list
 
 * **Params**
 
-    **Requred**
+    **Requried**
 
     **stream** - readable stream.
     
@@ -268,7 +268,7 @@ Methods short-list
 
 * **Params**
 
-    **Requred**
+    **Requried**
 
     **filter** - search options.
 
@@ -296,7 +296,7 @@ Methods short-list
 
 * **Params**
 
-    **Requred**
+    **Requried**
 
     **stream** - readable stream.
     
