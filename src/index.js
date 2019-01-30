@@ -82,7 +82,7 @@ module.exports = class MongoGridFSStore {
   
 			await pump(sourceStream, gridFSStream);
 
-			return Promise.resolve(true);
+			return Promise.resolve(gridFSStream.id);
 		} catch(error) {
 			throw error;
 		}
@@ -100,7 +100,7 @@ module.exports = class MongoGridFSStore {
 			const gridFSStream = this.storage.delete(__id);
 			await streamToPromise(gridFSStream);
 
-			return Promise.resolve(true);
+			return Promise.resolve(__id);
 		} catch(error) {
 			throw error;
 		}

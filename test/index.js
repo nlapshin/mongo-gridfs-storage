@@ -62,7 +62,7 @@ describe('MongoGridFSStore', () => {
 
 			const result = await store.write(stream, { filename });
 
-			expect(result).to.be.true;
+			expect(result).to.exist;
 
 			const resultFiles = await store.find({ filename });
       
@@ -114,7 +114,7 @@ describe('MongoGridFSStore', () => {
 			expect(initFile).to.be.not.null;
 
 			const result = await store.delete({ id: initFile._id });
-			expect(result).to.be.true;
+			expect(result).to.be.exist;
 
 			const endFile = await store.findOne({ filename });
 			expect(endFile).to.be.null;

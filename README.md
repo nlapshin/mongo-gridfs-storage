@@ -216,7 +216,7 @@ Methods short-list
 
 * **Description**
 
-     Method write readable stream into MongoDB file chunk storage and save it with filename or id, then has been set. Return Promise that must be resolved with a 'true' value in the end.
+     Method write readable stream into MongoDB file chunk storage and save it with filename or id, then has been set. Return Promise that must be resolved with a file id value in the end.
    
 * **Sample call**
 
@@ -252,7 +252,7 @@ Methods short-list
 
 * **Description**
 
-    Method remove file into MongoDB file storage by id. Return Promise that must be resolved with a 'true' value in the end.
+    Method remove file into MongoDB file storage by id. Return Promise that must be resolved with a file id in the end.
    
 * **Sample call**
 
