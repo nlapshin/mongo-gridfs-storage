@@ -88,6 +88,19 @@ module.exports = class MongoGridFSStore {
 		}
 	}
 
+	async writeBuffer(sourceBuffer, options = {}) {
+		if (Buffer.isBuffer(sourceBuffer) !== true) {
+			throw new Error('source data is not buffer');
+		}
+
+		const sourceStream = new Readable();
+
+		sourceStream.push(sourceBuffer);
+		sourceStream.push(null);
+		
+		return this.write(sourceStream, options);
+	}
+
 	async delete(filter = {}) {
 		try {
 			if (isUndefined(filter._id) && isUndefined(filter.id)) {

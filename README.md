@@ -248,6 +248,42 @@ Methods short-list
     
     id or filename are required.
 
+### writeBuffer
+
+* **Description**
+
+    Method write buffer into MongoDB file chunk storage and save it with filename or id, then has been set. Return Promise that must be resolved with a file id value in the end.
+   
+* **Sample call**
+
+    ```js
+      const mongoGridFsStorage = MongoGridFSStore(connection);
+
+      const buffer = getBuffer();
+      
+      const options = {
+        filename: 'filename'
+      };
+
+      const result = await mongoGridFsStorage.writeBuffer(buffer, options);
+    ```
+
+* **Params**
+
+    **Requried**
+
+    **buffer** - Node JS buffer.
+    
+    **filter** - search options.
+
+    **filter._id** - id for file.
+
+    **filter.id** - alias for id parameter.
+
+    **filter.filename** - filename.
+    
+    id or filename are required.
+
 ### delete
 
 * **Description**

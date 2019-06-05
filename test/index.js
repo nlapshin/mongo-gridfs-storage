@@ -10,11 +10,16 @@ const streamToPromise = require('stream-to-promise');
 const MongoGridFSStore = require('../src');
 
 const MongooseClient = require('./mongooseClient');
-const mongo = new MongooseClient({ url: 'mongodb://127.0.0.1:27017/test-db' });
+const mongo = new MongooseClient({ url: 'mongodb://dcloud_dev_db:10501/test-db' });
 
 function getFixtureReadableStream() {
 	const filePath = path.join(__dirname, 'fixtures', 'lorem_ipsum');
 	return fs.createReadStream(filePath);
+}
+
+function getFixtureBuffer() {
+	const filePath = path.join(__dirname, 'fixtures', 'lorem_ipsum');
+	return fs.readFileSync(filePath);
 }
 
 describe('MongoGridFSStore', () => {
@@ -35,6 +40,7 @@ describe('MongoGridFSStore', () => {
   
 	describe('write', function() {
 		this.slow(2000);
+		this.timeout(3000);
 
 		it('should throw error if stream is not instance of readable stream', () => {
 			const store = new MongoGridFSStore(mongo.mongoose.connection.db);
@@ -46,7 +52,6 @@ describe('MongoGridFSStore', () => {
 			const store = new MongoGridFSStore(mongo.mongoose.connection.db);
 
 			const stream = getFixtureReadableStream();
-
 			return expect(store.write(stream)).to.eventually.be.rejectedWith(Error, /filename is not set/);
 		});
 
@@ -57,21 +62,46 @@ describe('MongoGridFSStore', () => {
 			const filename = 'tester';
 
 			const initFiles = await store.find({ filename });
-
 			expect(initFiles.length).to.equal(0);
 
 			const result = await store.write(stream, { filename });
-
 			expect(result).to.exist;
 
 			const resultFiles = await store.find({ filename });
-      
+			expect(resultFiles.length).to.equal(1);
+		});
+	});
+
+	describe('writeBuffer', function() {
+		this.slow(2000);
+		this.timeout(3000);
+
+		it('should throw error if source data is not buffer', () => {
+			const store = new MongoGridFSStore(mongo.mongoose.connection.db);
+
+			return expect(store.writeBuffer()).to.eventually.be.rejectedWith(Error, /source data is not buffer/);
+		});
+
+		it('should write buffer into storage', async () => {
+			const store = new MongoGridFSStore(mongo.mongoose.connection.db);
+
+			const buffer = getFixtureBuffer();
+			const filename = 'tester';
+
+			const initFiles = await store.find({ filename });
+			expect(initFiles.length).to.equal(0);
+
+			const result = await store.writeBuffer(buffer, { filename });
+			expect(result).to.exist;
+
+			const resultFiles = await store.find({ filename });
 			expect(resultFiles.length).to.equal(1);
 		});
 	});
 
 	describe('read', function() {
 		this.slow(2000);
+		this.timeout(3000);
 
 		it('should throw error if filename and id is not set', () => {
 			const store = new MongoGridFSStore(mongo.mongoose.connection.db);
@@ -95,6 +125,7 @@ describe('MongoGridFSStore', () => {
 
 	describe('delete', function() {
 		this.slow(2000);
+		this.timeout(3000);
 
 		it('should throw error if id is not set', () => {
 			const store = new MongoGridFSStore(mongo.mongoose.connection.db);
@@ -123,6 +154,7 @@ describe('MongoGridFSStore', () => {
 
 	describe('findOne', function() {
 		this.slow(2000);
+		this.timeout(3000);
 
 		it('should return null if file not found', async () => {
 			const store = new MongoGridFSStore(mongo.mongoose.connection.db);
@@ -130,7 +162,6 @@ describe('MongoGridFSStore', () => {
 			const filename = 'tester';
 
 			const resultFile = await store.findOne({ filename });
-
 			expect(resultFile).to.be.null;
 		});
 
@@ -144,7 +175,6 @@ describe('MongoGridFSStore', () => {
 			await store.write(stream, { filename });
 
 			const resultFile = await store.findOne({ filename });
-
 			expect(resultFile.filename).to.equal(filename);
 		});
 	});
@@ -158,7 +188,6 @@ describe('MongoGridFSStore', () => {
 			const filename = 'tester';
 
 			const resultFiles = await store.find({ filename });
-
 			expect(resultFiles.length).to.equal(0);
 		});
 
@@ -171,11 +200,9 @@ describe('MongoGridFSStore', () => {
 			await store.write(stream, { filename });
 
 			const resultFiles = await store.find({ filename });
-
 			expect(resultFiles.length).to.equal(1);
 
 			const file = resultFiles[0];
-
 			expect(file.filename).to.equal(filename);
 		});
 	});
@@ -189,7 +216,6 @@ describe('MongoGridFSStore', () => {
 			const filename = 'tester';
 
 			const resultFile = await store.findOneAndRead({ filename });
-
 			expect(resultFile).to.be.null;
 		});
 
@@ -203,7 +229,6 @@ describe('MongoGridFSStore', () => {
 			await store.write(stream, { filename });
 
 			const result = await store.findOneAndRead({ filename });
-
 			expect(Buffer.compare(result, file)).to.equal(0);
 		});
 	});
