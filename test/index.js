@@ -10,7 +10,7 @@ const streamToPromise = require('stream-to-promise');
 const MongoGridFSStore = require('../src');
 
 const MongooseClient = require('./mongooseClient');
-const mongo = new MongooseClient({ url: 'mongodb://dcloud_dev_db:10501/test-db' });
+const mongo = new MongooseClient({ url: 'mongodb://127.0.0.1:27017/test-db' });
 
 function getFixtureReadableStream() {
 	const filePath = path.join(__dirname, 'fixtures', 'lorem_ipsum');
