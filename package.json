@@ -12,8 +12,11 @@
     "type": "git",
     "url": "git+https://github.com/nlapshin/mongo-gridfs-storage.git"
   },
-  "author": "",
-  "license": "ISC",
+  "author": {
+    "name": "Nikolay Lapshin",
+    "email": "nlapshin1989@gmail.com"
+  },
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/nlapshin/mongo-gridfs-storage/issues"
   },
