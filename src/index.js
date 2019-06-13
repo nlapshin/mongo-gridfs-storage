@@ -3,9 +3,9 @@ const { GridFSBucket } = require('mongodb');
 const pump = require('pump-promise');
 
 const { Readable } = require('stream');
-const { isUndefined } = require('lodash');
 
 const streamToPromise = require('./stream-to-promise');
+const isUndefined = require('./is-undefined');
 
 module.exports = class MongoGridFSStore {
 	constructor(connection = null, config = {}) {

@@ -11,7 +11,7 @@ const MongoGridFSStore = require('../src');
 const streamToPromise = require('../src/stream-to-promise');
 
 const MongooseClient = require('./mongooseClient');
-const mongo = new MongooseClient({ url: 'mongodb://127.0.0.1:27017/test-db' });
+const mongo = new MongooseClient({ url: 'mongodb://dcloud_dev_db:10501/test-db' });
 
 const filePaths = {
 	lorem_ipsum: path.join(__dirname, 'fixtures', 'lorem_ipsum'),
