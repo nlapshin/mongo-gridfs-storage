@@ -5,22 +5,19 @@ chai.use(chaiAsPromised);
 const { expect } = chai;
 const fs = require('fs');
 const path = require('path');
-const streamToPromise = require('stream-to-promise');
+const md5File = require('md5-file');
 
 const MongoGridFSStore = require('../src');
+const streamToPromise = require('../src/stream-to-promise');
 
 const MongooseClient = require('./mongooseClient');
 const mongo = new MongooseClient({ url: 'mongodb://127.0.0.1:27017/test-db' });
 
-function getFixtureReadableStream() {
-	const filePath = path.join(__dirname, 'fixtures', 'lorem_ipsum');
-	return fs.createReadStream(filePath);
-}
-
-function getFixtureBuffer() {
-	const filePath = path.join(__dirname, 'fixtures', 'lorem_ipsum');
-	return fs.readFileSync(filePath);
-}
+const filePaths = {
+	lorem_ipsum: path.join(__dirname, 'fixtures', 'lorem_ipsum'),
+	big_file: path.join(__dirname, 'fixtures', 'big_file'),
+	temp_file: path.join(__dirname, 'fixtures', 'temp_file')
+};
 
 describe('MongoGridFSStore', () => {
 	beforeEach(async () => {
@@ -51,14 +48,14 @@ describe('MongoGridFSStore', () => {
 		it('should throw error if filename is not set', () => {
 			const store = new MongoGridFSStore(mongo.mongoose.connection.db);
 
-			const stream = getFixtureReadableStream();
+			const stream = fs.createReadStream(filePaths.lorem_ipsum);
 			return expect(store.write(stream)).to.eventually.be.rejectedWith(Error, /filename is not set/);
 		});
 
 		it('should write file stream into storage', async () => {
 			const store = new MongoGridFSStore(mongo.mongoose.connection.db);
 
-			const stream = getFixtureReadableStream();
+			const stream = fs.createReadStream(filePaths.lorem_ipsum);
 			const filename = 'tester';
 
 			const initFiles = await store.find({ filename });
@@ -85,7 +82,7 @@ describe('MongoGridFSStore', () => {
 		it('should write buffer into storage', async () => {
 			const store = new MongoGridFSStore(mongo.mongoose.connection.db);
 
-			const buffer = getFixtureBuffer();
+			const buffer = fs.readFileSync(filePaths.lorem_ipsum);
 			const filename = 'tester';
 
 			const initFiles = await store.find({ filename });
@@ -112,8 +109,8 @@ describe('MongoGridFSStore', () => {
 		it('should read file from storage', async () => {
 			const store = new MongoGridFSStore(mongo.mongoose.connection.db);
 
-			const stream = getFixtureReadableStream();
-			const file = await streamToPromise(getFixtureReadableStream());
+			const stream = fs.createReadStream(filePaths.lorem_ipsum);
+			const file = await streamToPromise(fs.createReadStream(filePaths.lorem_ipsum));
 			const filename = 'tester';
 
 			await store.write(stream, { filename });
@@ -136,7 +133,7 @@ describe('MongoGridFSStore', () => {
 		it('should delete file from storage', async () => {
 			const store = new MongoGridFSStore(mongo.mongoose.connection.db);
 
-			const stream = getFixtureReadableStream();
+			const stream = fs.createReadStream(filePaths.lorem_ipsum);
 			const filename = 'tester';
 
 			await store.write(stream, { filename });
@@ -169,7 +166,7 @@ describe('MongoGridFSStore', () => {
 		it('should find one file with meta inforamtion', async () => {
 			const store = new MongoGridFSStore(mongo.mongoose.connection.db);
 
-			const stream = getFixtureReadableStream();
+			const stream = fs.createReadStream(filePaths.lorem_ipsum);
 			const filename = 'tester';
 
 			await store.write(stream, { filename });
@@ -194,7 +191,7 @@ describe('MongoGridFSStore', () => {
 		it('should find meta list of files', async () => {
 			const store = new MongoGridFSStore(mongo.mongoose.connection.db);
 
-			const stream = getFixtureReadableStream();
+			const stream = fs.createReadStream(filePaths.lorem_ipsum);
 			const filename = 'tester';
 
 			await store.write(stream, { filename });
@@ -222,14 +219,46 @@ describe('MongoGridFSStore', () => {
 		it('should find one file and then read it', async () => {
 			const store = new MongoGridFSStore(mongo.mongoose.connection.db);
 
-			const stream = getFixtureReadableStream();
+			const stream = fs.createReadStream(filePaths.lorem_ipsum);
 			const filename = 'tester';
-			const file = await streamToPromise(getFixtureReadableStream());
+			const file = await streamToPromise(fs.createReadStream(filePaths.lorem_ipsum));
 
 			await store.write(stream, { filename });
 
 			const result = await store.findOneAndRead({ filename });
 			expect(Buffer.compare(result, file)).to.equal(0);
 		});
+	});
+
+	describe('e2e', function() {
+		it('should correct write big file into storage and correct read it', async () => {
+			const store = new MongoGridFSStore(mongo.mongoose.connection.db);
+
+			const inputBuffer = fs.readFileSync(filePaths.big_file);
+
+			const inputCompareParams = {
+				buffer: inputBuffer,
+				length: inputBuffer.length,
+				md5: md5File.sync(filePaths.big_file)
+			};
+
+			const id = await store.writeBuffer(inputBuffer, { filename: 'filename' });
+			const outputFile = await store.read({ id });
+
+			fs.writeFileSync(filePaths.temp_file, outputFile);
+			const outputBuffer = fs.readFileSync(filePaths.temp_file);
+
+			const outputCompareParams = {
+				buffer: outputBuffer,
+				length: outputBuffer.length,
+				md5: md5File.sync(filePaths.temp_file)
+			};
+
+			fs.unlinkSync(filePaths.temp_file);
+
+			expect(inputCompareParams.length).to.equal(outputCompareParams.length);
+			expect(inputCompareParams.md5).to.equal(outputCompareParams.md5);
+			expect(Buffer.compare(inputCompareParams.buffer, outputCompareParams.buffer) === 0).to.be.true;
+		}).slow(2000);
 	});
 });
