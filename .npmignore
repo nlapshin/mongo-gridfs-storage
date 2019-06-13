@@ -1,0 +1,16 @@
+
+node_modules
+.DS_STORE
+*~
+test
+.git
+.gitignore
+.tmp
+*.swo
+*.swp
+*.swn
+*.swm
+*.log
+.eslintrc.js
+.editorconfig
+README.md
